@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opay APP | Wallet Home</title>
+<style>
+  :root {
+    --bg: #101214;
+    --panel: #121418;
+    --tile: #12161b;
+    --accent: #3de67d;       /* change this to recolor the app */
+    --accent-ink: #0B1633;
+    --text: #F2F4F7;
+    --muted: #A3ABB6;
+    --badge: #FF5C7A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #000; color: var(--text);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+  a { color: inherit; text-decoration: none; }
+  svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .app {
+    max-width: 430px; min-height: 100vh; margin: 0 auto;
+    background: var(--bg); padding: 20px 16px 96px; position: relative;
+  }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .user { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
+    color: var(--accent-ink); display: grid; place-items: center; font-weight: 700;
+  }
+  .top-actions { display: flex; gap: 8px; }
+  .icon-btn { width: 44px; height: 44px; display: grid; place-items: center; position: relative; }
+  .badge {
+    position: absolute; top: 2px; right: 0; background: var(--badge); color: #fff;
+    font-size: 10px; font-weight: 700; border-radius: 999px; padding: 2px 5px;
+  }
+
+  /* Balance card */
+  .balance { background: var(--accent); color: var(--accent-ink); border-radius: 20px 20px 0 0; padding: 18px 18px 22px; }
+  .balance-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .label { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; }
+  .label svg.i { width: 18px; height: 18px; }
+  .amount { font-size: 28px; font-weight: 700; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .earned { font-size: 14px; margin-top: 16px; }
+  .add-btn {
+    display: flex; align-items: center; gap: 6px; padding: 10px 16px; min-height: 44px;
+    border: 1.5px solid var(--accent-ink); border-radius: 999px; font-weight: 600; font-size: 15px;
+  }
+  .add-btn svg.i { width: 18px; height: 18px; }
+  .recent {
+    background: var(--panel); border-radius: 0 0 20px 20px; padding: 14px 18px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px;
+  }
+  .recent .left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .recent .left span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .recent .right { color: var(--muted); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .recent svg.i, .recent .right svg.i { width: 18px; height: 18px; }
+
+  /* Business strip */
+  .strip {
+    margin-top: 16px; background: var(--panel); border-radius: 16px; padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--muted);
+  }
+  .strip b { color: var(--accent); font-weight: 600; }
+  .strip .left { display: flex; align-items: center; gap: 10px; }
+
+  /* Action grids */
+  .grid {
+    margin-top: 16px; background: var(--panel); border-radius: 16px; padding: 20px 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 0;
+  }
+  .act { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); min-height: 44px; }
+  .act .tile { width: 56px; height: 56px; border-radius: 16px; background: var(--tile); display: grid; place-items: center; color: var(--accent); }
+  .grid.round .tile { border-radius: 50%; width: 52px; height: 52px; color: var(--text); }
+
+  /* Promo */
+  .promo {
+    margin-top: 16px; background: linear-gradient(135deg, #1B2A4D, #16203A);
+    border-radius: 16px; padding: 18px 16px;
+  }
+  .promo h3 { margin: 0 0 14px; font-size: 16px; }
+  .promo-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .promo-row .t { display: flex; flex-direction: column; gap: 4px; }
+  .promo-row .t strong { font-size: 18px; }
+  .promo-row .t span { font-size: 13px; color: var(--muted); }
+  .go { background: var(--accent); color: var(--accent-ink); font-weight: 700; padding: 12px 36px; min-height: 44px; border-radius: 999px; }
+
+  /* Bottom nav */
+  .nav {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
+    width: 100%; max-width: 430px; background: var(--panel);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 8px 0 14px; border-top: 1px solid #2A2E34;
+  }
+  .nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); min-height: 44px; }
+  .nav a.active { color: var(--text); font-weight: 600; }
+  .nav a.active svg.i { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- Icon set (simple outline icons, drawn here so no files are needed) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-help" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/><path d="M19 20a4 4 0 0 1-4 2h-2"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="8" y="8" width="3" height="3"/><rect x="13" y="8" width="3" height="3"/><rect x="8" y="13" width="3" height="3"/><path d="M13 13h3v3"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6.1A9.7 9.7 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-3.3 3.9M6.6 7.6C3.9 9.4 2 12 2 12s4 6 10 6c1.4 0 2.7-.3 3.9-.8"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9l1-5h14l1 5"/><path d="M4 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 4 0"/><path d="M5 12v8h14v-8"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 9v9M10 9v9M14 9v9M19 9v9M3 20h18"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M8 6V4h8v2"/><circle cx="12" cy="12.5" r="2.5"/></symbol>
+    <symbol id="i-loan" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M3 17l5-2 4 1h3a1.5 1.5 0 0 1 0 3h-3"/><path d="M8 20l8-1 5-4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10 10l2-2 2 2M10 14l2 2 2-2"/></symbol>
+    <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8l3.5 2.5-1.3 4h-4.4l-1.3-4z"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 3l4 3 4-3"/><path d="M10.5 10.5v4l3.5-2z"/></symbol>
+    <symbol id="i-wealth" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></symbol>
+    <symbol id="i-center" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></symbol>
+    <symbol id="i-invite" viewBox="0 0 24 24"><path d="M4 10v4h3l6 4V6L7 10z"/><path d="M17 9a4 4 0 0 1 0 6"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-5h4v5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M3 9h18v3H3zM12 9v11"/><path d="M12 9S9 9 8.5 7a2 2 0 0 1 3.5-1.5M12 9s3 0 3.5-2A2 2 0 0 0 12 5.5"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M7 15l3.5-3.5 2.5 2.5 4-5"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- Top bar -->
+  <header class="top">
+    <div class="user">
+      <div class="avatar">A</div>
+      <span>Hi, Odunyemi Adebayo</span>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" aria-label="Help"><svg class="i"><use href="#i-help"/></svg></button>
+      <button class="icon-btn" aria-label="Scan"><svg class="i"><use href="#i-scan"/></svg></button>
+      <button class="icon-btn" aria-label="Notifications"><svg class="i"><use href="#i-bell"/></svg><span class="badge">99+</span></button>
+    </div>
+  </header>
+
+  <!-- Balance card -->
+  <section>
+    <div class="balance">
+      <div class="balance-row">
+        <div>
+          <div class="label">
+            <svg class="i"><use href="#i-shield"/></svg>
+            <span>Available</span>
+            <button id="toggle" aria-label="Show or hide balance"><svg class="i" id="toggle-icon"><use href="#i-eye-off"/></svg></button>
+          </div>
+          <div class="amount"><span id="bal">****</span><svg class="i"><use href="#i-chev"/></svg></div>
+        </div>
+        <button class="add-btn"><svg class="i"><use href="#i-plus"/></svg>Add Money</button>
+      </div>
+      <div class="earned">Earned Today <span id="earn">****</span></div>
+    </div>
+    <div class="recent">
+      <div class="left">
+        <svg class="i"><use href="#i-check"/></svg>
+        <span>Transfer to [Recipient] -₦0.00</span>
+      </div>
+      <a class="right" href="#">Transactions <svg class="i"><use href="#i-chev"/></svg></a>
+    </div>
+  </section>
+
+  <!-- Business strip -->
+  <a class="strip" href="#">
+    <div class="left"><svg class="i"><use href="#i-store"/></svg><span>Business Service - Today's Sales: <b>₦0.00</b></span></div>
+    <svg class="i"><use href="#i-chev"/></svg>
+  </a>
+
+  <!-- Main actions -->
+  <section class="grid" aria-label="Main actions">
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-send"/></svg></span>To Wallet</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-bank"/></svg></span>To Bank</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-save"/></svg></span>Save</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-loan"/></svg></span>Loan</a>
+  </section>
+
+  <!-- Services -->
+  <section class="grid round" aria-label="Services">
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-phone"/></svg></span>Airtime</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-data"/></svg></span>Data</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-ball"/></svg></span>Betting</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-tv"/></svg></span>TV</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-wealth"/></svg></span>Invest</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-center"/></svg></span>Loan Center</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-invite"/></svg></span>Invite</a>
+    <a class="act" href="#"><span class="tile"><svg class="i"><use href="#i-more"/></svg></span>More</a>
+  </section>
+
+  <!-- Promo -->
+  <section class="promo">
+    <h3>Save &amp; earn more with [X]% p.a.</h3>
+    <div class="promo-row">
+      <div class="t">
+        <strong>Savings Box</strong>
+        <span>Your savings now grow faster.</span>
+      </div>
+      <button class="go">Go</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Bottom navigation -->
+<nav class="nav" aria-label="Main">
+  <a class="active" href="#"><svg class="i"><use href="#i-home"/></svg>Home</a>
+  <a href="#"><svg class="i"><use href="#i-gift"/></svg>Rewards</a>
+  <a href="#"><svg class="i"><use href="#i-trend"/></svg>Wealth</a>
+  <a href="#"><svg class="i"><use href="#i-card"/></svg>Cards</a>
+  <a href="#"><svg class="i"><use href="#i-user"/></svg>Me</a>
+</nav>
+
+<script>
+  // Show / hide the balance
+  var hidden = true;
+  var bal = document.getElementById('bal');
+  var earn = document.getElementById('earn');
+  var icon = document.querySelector('#toggle-icon use');
+  document.getElementById('toggle').addEventListener('click', function () {
+    hidden = !hidden;
+    bal.textContent = hidden ? '****' : '₦0.00';
+    earn.textContent = hidden ? '****' : '₦0.00';
+    icon.setAttribute('href', hidden ? '#i-eye-off' : '#i-eye');
+  });
+</script>
+
+</body>
+</html>

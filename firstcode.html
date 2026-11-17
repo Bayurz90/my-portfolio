@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[Your Name] | Developer Portfolio</title>
+<meta name="description" content="Portfolio of [Your Name], web and mobile developer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --surface: #FFFFFF;
+    --ink: #17181C;
+    --muted: #565B66;
+    --line: #E2DED8;
+    --accent: #3D5AFE;       /* change this to recolor the whole site */
+    --accent-ink: #FFFFFF;
+    --dark: #14151A;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; margin: 0; line-height: 1.1; }
+  h2 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.01em; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 88px 0 0; }
+  .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+
+  /* Nav */
+  header { position: sticky; top: 0; z-index: 10; background: rgba(247,245,242,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 24px; padding: 8px 0; }
+  .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; min-height: 44px; display: flex; align-items: center; }
+  .links { display: flex; flex-wrap: wrap; gap: 4px; }
+  .links a { padding: 10px 14px; min-height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 500; color: var(--muted); border-radius: 8px; }
+  .links a:hover { color: var(--ink); background: #ECE8E2; }
+
+  /* Hero */
+  .hero { padding-top: 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px; }
+  .hero-text { flex: 1 1 420px; display: flex; flex-direction: column; gap: 24px; }
+  .hero h1 { font-size: clamp(40px, 7vw, 68px); letter-spacing: -0.02em; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { margin: 0; font-size: 18px; color: var(--muted); max-width: 520px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: flex; align-items: center; min-height: 48px; padding: 12px 26px; border-radius: 999px; font-weight: 600; font-size: 16px; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-outline { border: 1.5px solid var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: #fff; }
+  .photo {
+    flex: 0 1 320px; aspect-ratio: 4 / 5; width: 100%; max-width: 320px;
+    border-radius: 28px; background: #E3DED6; color: var(--muted);
+    display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; font-size: 15px;
+  }
+
+  /* About */
+  .about { display: flex; flex-wrap: wrap; gap: 48px; }
+  .about > div { flex: 1 1 340px; }
+  .about p { margin: 16px 0 0; font-size: 17px; color: var(--muted); }
+  .facts { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; }
+  .facts li { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .facts li span:first-child { color: var(--muted); }
+  .facts li span:last-child { font-weight: 600; text-align: right; }
+
+  /* Skills */
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .skill { padding: 10px 18px; border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; font-size: 15px; font-weight: 500; }
+
+  /* Projects */
+  .projects { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 32px; }
+  .project { flex: 1 1 300px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+  .project .shot { aspect-ratio: 16 / 10; background: #E3DED6; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 14px; text-align: center; padding: 16px; }
+  .project .body { padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .project h3 { font-size: 22px; }
+  .project p { margin: 0; font-size: 15px; color: var(--muted); flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #ECE8E2; color: var(--muted); }
+  .project .link { margin-top: 6px; font-weight: 600; font-size: 15px; color: var(--accent); min-height: 44px; display: flex; align-items: center; }
+
+  /* Contact */
+  .contact { background: var(--dark); color: #fff; border-radius: 28px; padding: 56px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px; }
+  .contact p { margin: 12px 0 0; color: #C3C6CF; font-size: 17px; max-width: 460px; }
+  .contact .eyebrow { color: #9DB0FF; }
+  .socials { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 8px; }
+  .socials a { color: #C3C6CF; font-size: 15px; min-height: 44px; display: flex; align-items: center; }
+  .socials a:hover { color: #fff; }
+
+  footer { margin-top: 88px; border-top: 1px solid var(--line); }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 28px 24px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">[Your Name]</a>
+    <nav class="links" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">Web &amp; mobile developer</div>
+      <h1>Hi, I'm <span>[Your Name]</span>. I build things people use.</h1>
+      <p>[One or two sentences about what you build and what you are looking for, for example: junior developer roles, internships or freelance work.]</p>
+      <div class="buttons">
+        <a class="btn btn-primary" href="#projects">See my work</a>
+        <a class="btn btn-outline" href="#contact">Get in touch</a>
+      </div>
+    </div>
+    <div class="photo">[Add your photo]</div>
+  </div>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about">
+      <div>
+        <div class="eyebrow">About me</div>
+        <h2>A bit about me</h2>
+        <p>[Write 3 to 4 sentences: where you are from, what you studied, why you got into coding and what you enjoy building.]</p>
+        <p>[Optional: what you are learning now and what you want to do next.]</p>
+      </div>
+      <div>
+        <ul class="facts">
+          <li><span>Location</span><span>[City, Country]</span></li>
+          <li><span>Education</span><span>[Degree, University]</span></li>
+          <li><span>Focus</span><span>[e.g. Frontend, React Native]</span></li>
+          <li><span>Status</span><span>[Open to work]</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="eyebrow">Skills</div>
+    <h2>What I work with</h2>
+    <div class="skills">
+      <span class="skill">HTML</span>
+      <span class="skill">CSS</span>
+      <span class="skill">JavaScript</span>
+      <span class="skill">[React]</span>
+      <span class="skill">[React Native]</span>
+      <span class="skill">[Git &amp; GitHub]</span>
+      <span class="skill">[Figma]</span>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="eyebrow">Projects</div>
+    <h2>Things I've built</h2>
+    <div class="projects">
+
+      <article class="project">
+        <div class="shot">
+            <img 
+        </div>
+        <div class="body">
+          <h3>Coffee Shop Landing Page</h3>
+          <p>A responsive one-page website for a coffee shop with a menu, story and opening hours sections.</p>
+          <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span></div>
+          <a class="link" href="#">View project &rarr;</a>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="shot"></div>
+        <div class="body">
+          <h3>Wallet App Home Screen</h3>
+          <p>A mobile-first wallet home screen with balance card, quick actions, services grid and a show/hide balance toggle.</p>
+          <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div>
+          <a class="link" href="#">View project &rarr;</a>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="shot">[Screenshot of the project]</div>
+        <div class="body">
+          <h3>[Your Next Project]</h3>
+          <p>[Describe what it does, who it is for and what you learned building it.]</p>
+          <div class="tags"><span class="tag">[Tech]</span><span class="tag">[Tech]</span></div>
+          <a class="link" href="#">View project &rarr;</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="contact">
+      <div>
+        <div class="eyebrow">Contact</div>
+        <h2>Let's work together</h2>
+        <p>I'm open to [internships, junior roles, freelance projects]. Send me a message and I'll reply soon.</p>
+      </div>
+      <div>
+        <!-- Replace with your real email address -->
+        <a class="btn btn-primary" href="mailto:your@email.com">Email me</a>
+        <div class="socials">
+          <a href="#">GitHub</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">[X / Twitter]</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>&copy; <span id="year"></span> [Your Name]</div>
+    <div>Built with HTML, CSS and a little JavaScript.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
